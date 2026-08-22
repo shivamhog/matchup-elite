@@ -10,7 +10,7 @@ export function BottomNav({ items }: { items: NavItem[] }) {
         {items.map((item) => (
           <Link
             key={item.to}
-            to={item.to}
+            to={item.to as "/"}
             activeOptions={{ exact: item.exact ?? false }}
             className="group flex flex-1 flex-col items-center gap-1 py-2.5 text-muted-foreground transition-colors data-[status=active]:text-primary"
           >
