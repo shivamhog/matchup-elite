@@ -18,7 +18,7 @@ export const Route = createFileRoute("/client/profile")({
       { property: "og:description", content: "Account details and pay-per-match protections." },
     ],
   }),
-  component: ClientProfile;
+  component: ClientProfile,
 });
 
 function ClientProfile() {
