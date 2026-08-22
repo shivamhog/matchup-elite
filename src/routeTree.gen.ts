@@ -12,6 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ClientRouteImport } from './routes/client'
 import { Route as PlayerRouteImport } from './routes/player'
+import { Route as ClientIndexRouteImport } from './routes/client.index'
+import { Route as ClientBookingsRouteImport } from './routes/client.bookings'
+import { Route as ClientProfileRouteImport } from './routes/client.profile'
+import { Route as ClientWalletRouteImport } from './routes/client.wallet'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,34 +32,86 @@ const PlayerRoute = PlayerRouteImport.update({
   path: '/player',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClientIndexRoute = ClientIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ClientRoute,
+} as any)
+const ClientBookingsRoute = ClientBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => ClientRoute,
+} as any)
+const ClientProfileRoute = ClientProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => ClientRoute,
+} as any)
+const ClientWalletRoute = ClientWalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => ClientRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/client': typeof ClientRoute
+  '/client': typeof ClientRouteWithChildren
   '/player': typeof PlayerRoute
+  '/client/bookings': typeof ClientBookingsRoute
+  '/client/profile': typeof ClientProfileRoute
+  '/client/wallet': typeof ClientWalletRoute
+  '/client/': typeof ClientIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/client': typeof ClientRoute
   '/player': typeof PlayerRoute
+  '/client/bookings': typeof ClientBookingsRoute
+  '/client/profile': typeof ClientProfileRoute
+  '/client/wallet': typeof ClientWalletRoute
+  '/client': typeof ClientIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/client': typeof ClientRoute
+  '/client': typeof ClientRouteWithChildren
   '/player': typeof PlayerRoute
+  '/client/bookings': typeof ClientBookingsRoute
+  '/client/profile': typeof ClientProfileRoute
+  '/client/wallet': typeof ClientWalletRoute
+  '/client/': typeof ClientIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/client' | '/player'
+  fullPaths:
+    | '/'
+    | '/client'
+    | '/player'
+    | '/client/bookings'
+    | '/client/profile'
+    | '/client/wallet'
+    | '/client/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/client' | '/player'
-  id: '__root__' | '/' | '/client' | '/player'
+  to:
+    | '/'
+    | '/player'
+    | '/client/bookings'
+    | '/client/profile'
+    | '/client/wallet'
+    | '/client'
+  id:
+    | '__root__'
+    | '/'
+    | '/client'
+    | '/player'
+    | '/client/bookings'
+    | '/client/profile'
+    | '/client/wallet'
+    | '/client/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ClientRoute: typeof ClientRoute
+  ClientRoute: typeof ClientRouteWithChildren
   PlayerRoute: typeof PlayerRoute
 }
 
@@ -82,12 +138,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/client/': {
+      id: '/client/'
+      path: '/'
+      fullPath: '/client/'
+      preLoaderRoute: typeof ClientIndexRouteImport
+      parentRoute: typeof ClientRoute
+    }
+    '/client/bookings': {
+      id: '/client/bookings'
+      path: '/bookings'
+      fullPath: '/client/bookings'
+      preLoaderRoute: typeof ClientBookingsRouteImport
+      parentRoute: typeof ClientRoute
+    }
+    '/client/profile': {
+      id: '/client/profile'
+      path: '/profile'
+      fullPath: '/client/profile'
+      preLoaderRoute: typeof ClientProfileRouteImport
+      parentRoute: typeof ClientRoute
+    }
+    '/client/wallet': {
+      id: '/client/wallet'
+      path: '/wallet'
+      fullPath: '/client/wallet'
+      preLoaderRoute: typeof ClientWalletRouteImport
+      parentRoute: typeof ClientRoute
+    }
   }
 }
 
+interface ClientRouteChildren {
+  ClientBookingsRoute: typeof ClientBookingsRoute
+  ClientProfileRoute: typeof ClientProfileRoute
+  ClientWalletRoute: typeof ClientWalletRoute
+  ClientIndexRoute: typeof ClientIndexRoute
+}
+
+const ClientRouteChildren: ClientRouteChildren = {
+  ClientBookingsRoute: ClientBookingsRoute,
+  ClientProfileRoute: ClientProfileRoute,
+  ClientWalletRoute: ClientWalletRoute,
+  ClientIndexRoute: ClientIndexRoute,
+}
+
+const ClientRouteWithChildren =
+  ClientRoute._addFileChildren(ClientRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ClientRoute: ClientRoute,
+  ClientRoute: ClientRouteWithChildren,
   PlayerRoute: PlayerRoute,
 }
 export const routeTree = rootRouteImport
