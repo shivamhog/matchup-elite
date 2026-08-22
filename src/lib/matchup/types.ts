@@ -97,7 +97,7 @@ export type Booking = {
   createdAt: number;
   sets: MatchScore[];
   adminVerified: boolean;
-  winner?: "client" | "athlete";
+  winner?: "client" | "athlete" | undefined;
 };
 
 export type TxKind = "topup" | "escrow_lock" | "escrow_release" | "refund" | "payout";

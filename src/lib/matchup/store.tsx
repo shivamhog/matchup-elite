@@ -129,7 +129,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     const id = uid();
     setState((s) => {
       if (s.balance < athlete.rate) return s;
-      const court = COURTS.find((c) => c.id === courtId) ?? COURTS[0];
+      const court = COURTS.find((c) => c.id === courtId) ?? COURTS[0]!;
       const booking: Booking = {
         id,
         athleteId: athlete.id,
@@ -275,15 +275,15 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   /** Player view: fabricate an inbound gig request from a random client. */
   const simulateIncoming = useCallback(() => {
     setState((s) => {
-      const court = COURTS.filter((c) => c.distanceKm <= s.me.radiusKm)[0] ?? COURTS[0];
+      const court = COURTS.filter((c) => c.distanceKm <= s.me.radiusKm)[0] ?? COURTS[0]!;
       const booking: Booking = {
         id: uid(),
         athleteId: "me",
         athleteName: s.me.name,
-        clientName: CLIENT_NAMES[Math.floor(Math.random() * CLIENT_NAMES.length)],
+        clientName: CLIENT_NAMES[Math.floor(Math.random() * CLIENT_NAMES.length)]!,
         courtId: court.id,
         courtName: `${court.name}, ${court.area}`,
-        slot: SLOTS[Math.floor(Math.random() * SLOTS.length)],
+        slot: SLOTS[Math.floor(Math.random() * SLOTS.length)]!,
         amount: s.me.rate,
         status: "pending",
         createdAt: Date.now(),
